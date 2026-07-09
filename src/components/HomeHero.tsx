@@ -7,7 +7,8 @@ import { useRouter } from 'next/navigation';
 import { ArrowRight } from 'lucide-react';
 import type { HomeData } from '../types';
 
-const FALLBACK_INTRO = 'Photography and film by Dean Oriade.';
+const FALLBACK_INTRO = 'Photography, film, and brand strategy.';
+const FALLBACK_SUBTEXT = 'Marketing strategist and filmmaker in Toronto, founder of Lotus Media and ROSSE Creative Collective.';
 
 export function HomeHero({ data }: { data: HomeData | null }) {
   const intro = data?.intro || FALLBACK_INTRO;
@@ -81,41 +82,47 @@ export function HomeHero({ data }: { data: HomeData | null }) {
               <h1 className="font-serif text-2xl md:text-4xl italic text-white order-1 md:order-2 tracking-wide">Dean Oriade</h1>
             </div>
 
+            {/*
+              The typed-out text below is purely a visual effect (aria-hidden) so
+              screen readers don't hear it build up character by character. The
+              sr-only span carries the real text immediately, so it's present in
+              the server-rendered HTML for crawlers and assistive tech even
+              before the animation runs.
+            */}
             <h2 className="font-serif text-3xl md:text-7xl leading-[1.1] text-white mix-blend-overlay min-h-[4em] md:min-h-[2.2em]">
-              {text}
-              <motion.span
-                animate={{ opacity: [1, 1, 0, 0] }}
-                transition={{ repeat: Infinity, duration: 0.8, ease: 'linear', times: [0, 0.5, 0.5, 1] }}
-                className="inline-block w-[0.1em] h-[0.8em] bg-white ml-1 align-baseline"
-              />
+              <span className="sr-only">{intro}</span>
+              <span aria-hidden="true">
+                {text}
+                <motion.span
+                  animate={{ opacity: [1, 1, 0, 0] }}
+                  transition={{ repeat: Infinity, duration: 0.8, ease: 'linear', times: [0, 0.5, 0.5, 1] }}
+                  className="inline-block w-[0.1em] h-[0.8em] bg-white ml-1 align-baseline"
+                />
+              </span>
             </h2>
 
-            <div className="mt-8 md:mt-12 min-h-[5rem]">
-              {isTypingComplete && (
-                <motion.div
-                  initial={{ opacity: 0, y: 10 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.8 }}
-                  className="flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
-                >
-                  <p className="text-neutral-400 text-sm font-light leading-relaxed max-w-md">
-                    {data?.subtext || 'Filmmaker & photographer based in Toronto.'}
-                  </p>
-                  <button
-                    onClick={() => router.push('/work')}
-                    className="group relative px-6 md:px-8 py-3 md:py-4 overflow-hidden rounded-full bg-white text-black transition-all hover:bg-neutral-200 shrink-0 min-h-[44px]"
-                  >
-                    <div className="relative z-10 flex items-center gap-3">
-                      <span className="text-xs font-bold uppercase tracking-widest">
-                        {data?.ctaText || 'View the Work'}
-                      </span>
-                      <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                    </div>
-                    <div className="absolute inset-0 bg-white/50 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
-                  </button>
-                </motion.div>
-              )}
-            </div>
+            <motion.div
+              initial={{ opacity: 0, y: 10 }}
+              animate={isTypingComplete ? { opacity: 1, y: 0 } : { opacity: 0, y: 10 }}
+              transition={{ duration: 0.8 }}
+              className="mt-8 md:mt-12 min-h-[5rem] flex flex-col md:flex-row justify-between items-start md:items-end gap-6"
+            >
+              <p className="text-neutral-400 text-sm font-light leading-relaxed max-w-md">
+                {data?.subtext || FALLBACK_SUBTEXT}
+              </p>
+              <button
+                onClick={() => router.push('/work')}
+                className="group relative px-6 md:px-8 py-3 md:py-4 overflow-hidden rounded-full bg-white text-black transition-all hover:bg-neutral-200 shrink-0 min-h-[44px]"
+              >
+                <div className="relative z-10 flex items-center gap-3">
+                  <span className="text-xs font-bold uppercase tracking-widest">
+                    {data?.ctaText || 'View the Work'}
+                  </span>
+                  <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                </div>
+                <div className="absolute inset-0 bg-white/50 scale-x-0 group-hover:scale-x-100 transition-transform origin-left duration-500" />
+              </button>
+            </motion.div>
           </div>
         </div>
       </motion.div>

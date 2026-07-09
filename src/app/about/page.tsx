@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 import { sanityFetch } from '@/sanity/client';
-import { ABOUT_META_QUERY, toAboutData } from '@/sanity/queries';
+import { ABOUT_META_QUERY, BRANDS_QUERY, toAboutData, toBrand } from '@/sanity/queries';
 import { AboutContent } from '../../components/AboutContent';
 import { ABOUT_FALLBACK } from '../../lib/aboutFallback';
 
@@ -13,8 +13,12 @@ export const metadata: Metadata = {
 };
 
 export default async function About() {
-  const rawAbout = await sanityFetch<any>(ABOUT_META_QUERY);
+  const [rawAbout, rawBrands] = await Promise.all([
+    sanityFetch<any>(ABOUT_META_QUERY),
+    sanityFetch<any[]>(BRANDS_QUERY),
+  ]);
   const aboutData = toAboutData(rawAbout) || ABOUT_FALLBACK;
+  const brands = (rawBrands || []).map(toBrand);
 
-  return <AboutContent data={aboutData} />;
+  return <AboutContent data={aboutData} brands={brands} />;
 }

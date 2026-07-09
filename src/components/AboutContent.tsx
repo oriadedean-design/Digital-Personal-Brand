@@ -1,12 +1,13 @@
 "use client";
 
 import React from 'react';
+import Link from 'next/link';
 import Image from 'next/image';
 import { motion } from 'framer-motion';
-import { Camera, MapPin, Heart, GraduationCap, Cpu } from 'lucide-react';
-import type { AboutData } from '../types';
+import { Camera, MapPin, Heart, GraduationCap, Cpu, ArrowUpRight } from 'lucide-react';
+import type { AboutData, Brand } from '../types';
 
-export function AboutContent({ data }: { data: AboutData }) {
+export function AboutContent({ data, brands }: { data: AboutData; brands: Brand[] }) {
   const heading = data.heading || 'Quiet Excellence.';
   const subtitle = data.subtitle || 'Marketing Manager / Strategist';
   const location = data.location || 'Mississauga, Ontario';
@@ -78,6 +79,30 @@ export function AboutContent({ data }: { data: AboutData }) {
             ))}
           </motion.div>
         </section>
+
+        {brands.length > 0 && (
+          <section className="border-t border-white/10 pt-10 md:pt-12">
+            <h3 className="text-sm font-mono uppercase text-neutral-400 mb-6 md:mb-8 tracking-widest">Ventures</h3>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 md:gap-6">
+              {brands.map((brand) => (
+                <Link
+                  key={brand.id}
+                  href={`/${brand.slug}`}
+                  className="group block p-5 md:p-6 border border-white/10 rounded-lg bg-white/5 hover:bg-white/10 hover:border-white/20 transition-colors"
+                >
+                  <div className="flex items-start justify-between gap-3">
+                    <div>
+                      <h4 className="font-serif text-xl text-white">{brand.name}</h4>
+                      <p className="text-xs text-neutral-500 font-mono uppercase tracking-widest mt-1">{brand.role}</p>
+                    </div>
+                    <ArrowUpRight className="w-4 h-4 text-neutral-500 group-hover:text-white transition-colors shrink-0" />
+                  </div>
+                  {brand.tagline && <p className="text-sm text-neutral-400 mt-3">{brand.tagline}</p>}
+                </Link>
+              ))}
+            </div>
+          </section>
+        )}
 
         {data.education && data.education.length > 0 && (
           <motion.section

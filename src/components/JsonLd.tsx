@@ -20,12 +20,26 @@ export function PersonJsonLd() {
         '@type': 'Person',
         name: 'Dean Oriade',
         url: SITE_URL,
-        jobTitle: 'Filmmaker & Photographer',
+        jobTitle: 'Marketing Strategist, Filmmaker & Photographer',
+        description:
+          'Marketing strategist and filmmaker based in Toronto, founder of Lotus Media and ROSSE Creative Collective.',
         alumniOf: {
           '@type': 'CollegeOrUniversity',
           name: 'York University',
         },
         award: ['Canon Canada Top 20 Creator 2023', 'Canon Canada Top 20 Creator 2024'],
+        founder: [
+          {
+            '@type': 'Organization',
+            name: 'Lotus Media',
+            url: `${SITE_URL}/lotus-media`,
+          },
+          {
+            '@type': 'Organization',
+            name: 'ROSSE Creative Collective',
+            url: `${SITE_URL}/rosse`,
+          },
+        ],
         sameAs: [
           'https://www.instagram.com/deanaldo.ca',
           'https://x.com/deanaldoca',

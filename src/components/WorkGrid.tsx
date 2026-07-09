@@ -163,7 +163,10 @@ export function WorkGrid({ projects, meta }: { projects: Project[]; meta: PageMe
                               height={project.thumbnail.height || 1000}
                               sizes="(max-width: 768px) 50vw, 33vw"
                               className="w-full h-auto object-cover grayscale contrast-[1.1] group-hover:grayscale-0 transition-all duration-700 ease-in-out will-change-transform"
-                              loading="lazy"
+                              // First row (top of each column) is above the fold and is
+                              // typically the LCP element — load it eagerly with high
+                              // priority instead of lazy, or it delays LCP.
+                              {...(index === 0 ? { priority: true } : { loading: 'lazy' as const })}
                             />
                             <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-60 group-hover:opacity-0 transition-opacity duration-500" />
                           </div>
