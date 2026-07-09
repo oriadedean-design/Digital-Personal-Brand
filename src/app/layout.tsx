@@ -8,11 +8,24 @@ const instrumentSerif = Instrument_Serif({
   style: ['normal', 'italic'],
   subsets: ['latin'],
   variable: '--font-serif',
+  display: 'swap',
 });
 
 export const metadata: Metadata = {
-  title: 'Dean Oriade | Creative Director',
-  description: 'The Infinite Archive of Dean Oriade.',
+  metadataBase: new URL('https://deanoriade.ca'),
+  title: {
+    default: 'Dean Oriade | Filmmaker & Photographer, Toronto',
+    template: '%s',
+  },
+  description: 'Photography and film by Dean Oriade, founder of Lotus Media and ROSSE Creative Collective, based in Toronto.',
+  openGraph: {
+    siteName: 'Dean Oriade',
+    type: 'website',
+    locale: 'en_CA',
+  },
+  twitter: {
+    card: 'summary_large_image',
+  },
 };
 
 export default function RootLayout({

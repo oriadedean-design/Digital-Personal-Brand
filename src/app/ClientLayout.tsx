@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { Navigation } from '../components/Navigation';
-import { motion, AnimatePresence } from 'framer-motion';
+import { motion, AnimatePresence, MotionConfig } from 'framer-motion';
 import { usePathname } from 'next/navigation';
 import { ReactLenis } from 'lenis/react';
 
@@ -14,6 +14,7 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
   }
 
   return (
+    <MotionConfig reducedMotion="user">
     <ReactLenis root options={{ lerp: 0.1, duration: 1.5, smoothWheel: true }}>
       <div className="relative min-h-screen bg-background text-text font-sans selection:bg-white/30 selection:text-white overflow-x-hidden flex flex-col">
         {/* --- CINEMATIC LAYERS (Fixed to Viewport) --- */}
@@ -44,21 +45,14 @@ export function ClientLayout({ children }: { children: React.ReactNode }) {
         {/* --- FOOTER --- */}
         <footer className="relative z-10 w-full px-6 md:px-12 py-6 mt-auto flex justify-between items-end text-[10px] font-mono uppercase tracking-widest pb-24 md:pb-8">
           <div className="text-neutral-500">
-            &copy; 2025 Dean Oriade. All Rights Reserved.
+            &copy; {new Date().getFullYear()} Dean Oriade. All Rights Reserved.
           </div>
-          
-          <a 
-            href="/studio" 
-            className="text-neutral-800 hover:text-white transition-colors duration-500"
-            aria-label="Admin Access"
-          >
-            Update Portal
-          </a>
         </footer>
 
         {/* --- LIQUID INTERFACE --- */}
         <Navigation />
       </div>
     </ReactLenis>
+    </MotionConfig>
   );
 }

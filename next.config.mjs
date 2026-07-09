@@ -2,12 +2,8 @@
 const nextConfig = {
   reactStrictMode: true,
   images: {
-    remotePatterns: [
-      {
-        protocol: 'https',
-        hostname: 'cdn.sanity.io',
-      },
-    ],
+    loader: 'custom',
+    loaderFile: './src/lib/sanityImageLoader.ts',
   },
 };
 

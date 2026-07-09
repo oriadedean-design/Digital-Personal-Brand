@@ -20,8 +20,8 @@ export const Navigation: React.FC = () => {
   const pathname = usePathname();
 
   return (
-    <div className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-auto">
-      <motion.div 
+    <nav aria-label="Primary" className="fixed bottom-8 left-1/2 -translate-x-1/2 z-[100] w-auto">
+      <motion.div
         initial={{ y: 100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ type: "spring", damping: 20, stiffness: 100, delay: 0.5 }}
@@ -75,6 +75,6 @@ export const Navigation: React.FC = () => {
           );
         })}
       </motion.div>
-    </div>
+    </nav>
   );
 };

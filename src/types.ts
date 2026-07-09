@@ -1,3 +1,4 @@
+import type { ProjectCategory } from './lib/categories';
 
 export interface CMSImage {
   url: string;
@@ -10,11 +11,11 @@ export interface Project {
   id: string;
   slug: string;
   title: string;
-  category: string;
+  category: ProjectCategory;
   year: number;
   thumbnail: CMSImage;
-  client: string;
-  description: string;
+  client?: string;
+  description?: string;
   gallery: CMSImage[];
   seoTitle?: string;
   seoDescription?: string;
@@ -24,6 +25,9 @@ export interface Project {
   metadataLocation?: string;
   pullQuote?: string;
   body?: any[];
+  mediaType: 'photo' | 'video';
+  videoUrl?: string;
+  videoThumbnail?: CMSImage;
 }
 
 export interface StrategyItem {
@@ -32,9 +36,9 @@ export interface StrategyItem {
   role: string;
   company: string;
   period: string;
-  stat: string;
+  stat?: string;
   description: string;
-  image: CMSImage;
+  image?: CMSImage;
   content?: {
     challenge: string;
     solution: string;
@@ -49,18 +53,40 @@ export interface JournalEntry {
   date: string;
   category: string;
   excerpt: string;
-  content: string; // In a real CMS, this might be a Rich Text object
+  body: any[]; // Portable Text blocks
   coverImage?: CMSImage;
+  estimatedReadingTime?: number;
 }
 
-export interface Venture {
+export interface Accomplishment {
+  title: string;
+  detail: string;
+  year?: string;
+}
+
+export interface PressLink {
+  label: string;
+  url: string;
+}
+
+export interface Brand {
   id: string;
   slug: string;
   name: string;
+  tagline?: string;
+  founded?: string;
   role: string;
-  description: string;
-  image: CMSImage;
-  link: string;
+  description: any[]; // Portable Text blocks
+  accomplishments?: Accomplishment[];
+  gallery?: CMSImage[];
+  instagramUrl?: string;
+  pressLinks?: PressLink[];
+  logo?: CMSImage;
+}
+
+export interface GearItem {
+  item: string;
+  detail: string;
 }
 
 export interface EducationItem {
@@ -74,51 +100,34 @@ export interface SkillCategory {
   skills: string[];
 }
 
-export interface SiteConfig {
-  home: {
-    intro: string;
-    subtext: string;
-    heroImage: CMSImage;
-    ctaText?: string;
-  };
-  about: {
-    portraitImage: CMSImage;
-    narrative: string[];
-    heading?: string;
-    subtitle?: string;
-    location?: string;
-    gear?: { item: string; detail: string; }[];
-    education?: { school: string; degree: string; year: string; }[];
-    bucketList?: { item: string; completed: boolean; }[];
-  };
-  work: {
-    title: string;
-    caption: string;
-    wink: string;
-  };
-  strategy: {
-    title: string;
-    caption: string;
-    wink: string;
-  };
-  ventures: {
-    title: string;
-    caption: string;
-    wink: string;
-  };
-  contact: {
-    title: string;
-    caption: string;
-    wink: string;
-  };
+export interface BucketListItem {
+  item: string;
+  completed: boolean;
+}
+
+export interface AboutData {
+  heading?: string;
+  subtitle?: string;
+  location?: string;
+  portraitImage?: CMSImage;
+  narrative: string[];
+  gear?: GearItem[];
+  education?: EducationItem[];
+  skills?: SkillCategory[];
+  bucketList?: BucketListItem[];
+}
+
+export interface PageMeta {
+  title: string;
+  caption: string;
+  wink?: string;
+}
+
+export interface HomeData {
+  intro: string;
+  subtext: string;
+  heroImage?: CMSImage;
+  ctaText?: string;
 }
 
 export type PageState = 'intro' | 'main';
-
-export enum FilterCategory {
-  ALL = 'All',
-  ARCHITECTURE = 'Architecture',
-  FACES = 'Faces',
-  CLIENT = 'Client Work',
-  FILM = 'Film'
-}

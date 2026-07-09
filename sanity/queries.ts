@@ -1,44 +1,75 @@
 import { urlFor } from './client';
-import type { Project, StrategyItem, JournalEntry, Venture } from '../src/types';
+import type { Project, StrategyItem, JournalEntry, Brand, AboutData, HomeData, PageMeta, CMSImage } from '../src/types';
+
+// GROQ fragment appended to image fields so we can size next/image correctly
+// (avoids layout shift) without a second round-trip for asset metadata.
+const DIMS = '{..., "dims": asset->metadata.dimensions}';
 
 // ─── Query Strings ────────────────────────────────────────────────────────────
 
-export const HOME_QUERY = `*[_type == "siteConfig"][0].home`;
+export const HOME_QUERY = `*[_type == "siteConfig"][0].home{
+  intro, subtext, ctaText, heroImage${DIMS}
+}`;
 export const WORK_META_QUERY = `*[_type == "siteConfig"][0].work`;
 export const STRATEGY_META_QUERY = `*[_type == "siteConfig"][0].strategy`;
 export const VENTURES_META_QUERY = `*[_type == "siteConfig"][0].ventures`;
-export const ABOUT_META_QUERY = `*[_type == "siteConfig"][0].about`;
+export const ABOUT_META_QUERY = `*[_type == "siteConfig"][0].about{
+  ..., portraitImage${DIMS}
+}`;
 export const SOCIAL_LINKS_QUERY = `*[_type == "siteConfig"][0].socialLinks`;
 
 export const PROJECTS_QUERY = `*[_type == "project"] | order(year desc) {
   _id, title, slug, category, year, client, description,
-  thumbnail, gallery, seoTitle, seoDescription, tags,
-  discipline, metadataCamera, metadataLocation, pullQuote, body
+  thumbnail${DIMS}, gallery[]${DIMS}, seoTitle, seoDescription, tags,
+  discipline, metadataCamera, metadataLocation, pullQuote, body,
+  mediaType, videoUrl, videoThumbnail${DIMS}
 }`;
 
-export const JOURNAL_QUERY = `*[_type == "journal"] | order(date desc) {
-  _id, title, slug, date, category, excerpt, body, coverImage, estimatedReadingTime, published
-}`;
+export const PROJECT_SLUGS_QUERY = `*[_type == "project"].slug.current`;
 
 export const JOURNAL_LIST_QUERY = `*[_type == "journal" && published == true] | order(date desc) {
   _id, title, slug, date, category, excerpt, estimatedReadingTime
 }`;
 
 export const JOURNAL_POST_QUERY = `*[_type == "journal" && slug.current == $slug][0] {
-  _id, title, slug, date, category, excerpt, body, coverImage, estimatedReadingTime, published
+  _id, title, slug, date, category, excerpt, body, coverImage${DIMS}, estimatedReadingTime, published, seoTitle, seoDescription
 }`;
 
-export const VENTURES_QUERY = `*[_type == "venture"] | order(_createdAt asc) {
-  _id, name, slug, role, description, heroImage, link
+export const JOURNAL_SLUGS_QUERY = `*[_type == "journal" && published == true].slug.current`;
+
+export const BRANDS_QUERY = `*[_type == "brand"] | order(_createdAt asc) {
+  _id, name, slug, tagline, founded, role, description, accomplishments,
+  gallery[]${DIMS}, instagramUrl, pressLinks, logo${DIMS}
+}`;
+
+export const BRAND_QUERY = `*[_type == "brand" && slug.current == $slug][0] {
+  _id, name, slug, tagline, founded, role, description, accomplishments,
+  gallery[]${DIMS}, instagramUrl, pressLinks, logo${DIMS}
 }`;
 
 export const STRATEGY_QUERY = `*[_type == "strategy"] | order(_createdAt asc) {
-  _id, company, slug, role, period, stat, description, image, challenge, solution, result
+  _id, company, slug, role, period, stat, description, image${DIMS}, challenge, solution, result
 }`;
 
+export const STRATEGY_SLUGS_QUERY = `*[_type == "strategy"].slug.current`;
+
 export const PHOTOGRAPHS_QUERY = `*[_type == "photograph"] | order(year desc) {
-  _id, title, slug, image, category, caption, camera, lens, location, year, tags
+  _id, title, slug, image${DIMS}, category, caption, camera, lens, location, year, tags
 }`;
+
+// ─── Image helper ──────────────────────────────────────────────────────────────
+
+function toCMSImage(source: any, targetWidth: number, fallbackAlt: string): CMSImage {
+  const aspectRatio = source?.dims?.aspectRatio;
+  const width = targetWidth;
+  const height = aspectRatio ? Math.round(targetWidth / aspectRatio) : targetWidth;
+  return {
+    url: urlFor(source).width(width).format('webp').quality(80).url(),
+    alt: source.alt ?? fallbackAlt,
+    width,
+    height,
+  };
+}
 
 // ─── Transformers (raw Sanity doc → app type) ─────────────────────────────────
 
@@ -51,13 +82,10 @@ export function toProject(p: any): Project {
     year: p.year,
     client: p.client,
     description: p.description,
-    thumbnail: p.thumbnail
-      ? { url: urlFor(p.thumbnail).width(800).format('webp').quality(80).url(), alt: p.thumbnail.alt ?? p.title }
-      : { url: '', alt: '' },
-    gallery: (p.gallery ?? []).map((g: any) => ({
-      url: urlFor(g).width(1200).format('webp').quality(80).url(),
-      alt: g.alt ?? '',
-    })),
+    thumbnail: p.thumbnail ? toCMSImage(p.thumbnail, 800, p.title) : { url: '', alt: '' },
+    gallery: (p.gallery ?? [])
+      .filter((g: any) => g?.asset)
+      .map((g: any) => toCMSImage(g, 1200, p.title)),
     seoTitle: p.seoTitle,
     seoDescription: p.seoDescription,
     tags: p.tags,
@@ -66,6 +94,9 @@ export function toProject(p: any): Project {
     metadataLocation: p.metadataLocation,
     pullQuote: p.pullQuote,
     body: p.body,
+    mediaType: p.mediaType ?? 'photo',
+    videoUrl: p.videoUrl,
+    videoThumbnail: p.videoThumbnail ? toCMSImage(p.videoThumbnail, 1200, p.title) : undefined,
   };
 }
 
@@ -78,9 +109,7 @@ export function toStrategyItem(s: any): StrategyItem {
     period: s.period,
     stat: s.stat,
     description: s.description,
-    image: s.image
-      ? { url: urlFor(s.image).width(800).format('webp').quality(80).url(), alt: s.image.alt ?? s.company }
-      : { url: '', alt: '' },
+    image: s.image ? toCMSImage(s.image, 800, s.company) : undefined,
     content: (s.challenge || s.solution || s.result) ? {
       challenge: s.challenge ?? '',
       solution: s.solution ?? '',
@@ -90,16 +119,6 @@ export function toStrategyItem(s: any): StrategyItem {
 }
 
 export function toJournalEntry(j: any): JournalEntry {
-  // body is portable text blocks; content field on app type is string.
-  // Extracts plain text so the existing drawer renders without changes.
-  const bodyText: string =
-    Array.isArray(j.body) && j.body.length > 0
-      ? j.body
-          .filter((b: any) => b._type === 'block')
-          .map((b: any) => b.children?.map((c: any) => c.text).join('') ?? '')
-          .join('\n\n')
-      : j.excerpt ?? '';
-
   return {
     id: j._id,
     slug: j.slug?.current ?? j._id,
@@ -107,23 +126,61 @@ export function toJournalEntry(j: any): JournalEntry {
     date: j.date ?? '',
     category: j.category,
     excerpt: j.excerpt ?? '',
-    content: bodyText,
-    coverImage: j.coverImage
-      ? { url: urlFor(j.coverImage).width(1200).format('webp').quality(80).url(), alt: j.coverImage.alt ?? j.title }
-      : undefined,
+    body: j.body ?? [],
+    estimatedReadingTime: j.estimatedReadingTime,
+    coverImage: j.coverImage ? toCMSImage(j.coverImage, 1200, j.title) : undefined,
   };
 }
 
-export function toVenture(v: any): Venture {
+export function toBrand(b: any): Brand {
   return {
-    id: v._id,
-    slug: v.slug?.current ?? v._id,
-    name: v.name,
-    role: v.role,
-    description: v.description,
-    image: v.heroImage
-      ? { url: urlFor(v.heroImage).width(1200).format('webp').quality(80).url(), alt: v.heroImage.alt ?? v.name }
-      : { url: '', alt: '' },
-    link: v.link ?? '',
+    id: b._id,
+    slug: b.slug?.current ?? b._id,
+    name: b.name,
+    tagline: b.tagline,
+    founded: b.founded,
+    role: b.role,
+    description: b.description ?? [],
+    accomplishments: b.accomplishments,
+    gallery: (b.gallery ?? [])
+      .filter((g: any) => g?.asset)
+      .map((g: any) => toCMSImage(g, 1200, b.name)),
+    instagramUrl: b.instagramUrl,
+    pressLinks: b.pressLinks,
+    logo: b.logo ? toCMSImage(b.logo, 400, b.name) : undefined,
+  };
+}
+
+export function toAboutData(a: any): AboutData | null {
+  if (!a) return null;
+  return {
+    heading: a.heading,
+    subtitle: a.subtitle,
+    location: a.location,
+    portraitImage: a.portraitImage ? toCMSImage(a.portraitImage, 800, 'Dean Oriade Portrait') : undefined,
+    narrative: a.narrative ?? [],
+    gear: a.gear,
+    education: a.education,
+    skills: a.skills,
+    bucketList: a.bucketList,
+  };
+}
+
+export function toHomeData(h: any): HomeData | null {
+  if (!h) return null;
+  return {
+    intro: h.intro ?? '',
+    subtext: h.subtext ?? '',
+    ctaText: h.ctaText,
+    heroImage: h.heroImage ? toCMSImage(h.heroImage, 1600, 'Dean Oriade') : undefined,
+  };
+}
+
+export function toPageMeta(m: any, fallback: PageMeta): PageMeta {
+  if (!m) return fallback;
+  return {
+    title: m.title || fallback.title,
+    caption: m.caption || fallback.caption,
+    wink: m.wink,
   };
 }
