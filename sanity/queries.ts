@@ -59,6 +59,11 @@ export const PHOTOGRAPHS_QUERY = `*[_type == "photograph"] | order(year desc) {
 
 // ─── Image helper ──────────────────────────────────────────────────────────────
 
+// Used only when an image has no real alt text yet in Sanity, so search
+// engines and AI crawlers can still tie the image back to Dean by name,
+// role, and location instead of getting nothing.
+const PERSON_BRAND = 'Dean Oriade, a Toronto-based filmmaker and photographer';
+
 function toCMSImage(source: any, targetWidth: number, fallbackAlt: string): CMSImage {
   const aspectRatio = source?.dims?.aspectRatio;
   const width = targetWidth;
@@ -82,10 +87,12 @@ export function toProject(p: any): Project {
     year: p.year,
     client: p.client,
     description: p.description,
-    thumbnail: p.thumbnail ? toCMSImage(p.thumbnail, 800, p.title) : { url: '', alt: '' },
+    thumbnail: p.thumbnail
+      ? toCMSImage(p.thumbnail, 800, `${p.title}, photographed by ${PERSON_BRAND}`)
+      : { url: '', alt: '' },
     gallery: (p.gallery ?? [])
       .filter((g: any) => g?.asset)
-      .map((g: any) => toCMSImage(g, 1200, p.title)),
+      .map((g: any) => toCMSImage(g, 1200, `${p.title}, photographed by ${PERSON_BRAND}`)),
     seoTitle: p.seoTitle,
     seoDescription: p.seoDescription,
     tags: p.tags,
@@ -96,7 +103,9 @@ export function toProject(p: any): Project {
     body: p.body,
     mediaType: p.mediaType ?? 'photo',
     videoUrl: p.videoUrl,
-    videoThumbnail: p.videoThumbnail ? toCMSImage(p.videoThumbnail, 1200, p.title) : undefined,
+    videoThumbnail: p.videoThumbnail
+      ? toCMSImage(p.videoThumbnail, 1200, `${p.title}, a film by ${PERSON_BRAND}`)
+      : undefined,
   };
 }
 
@@ -109,7 +118,7 @@ export function toStrategyItem(s: any): StrategyItem {
     period: s.period,
     stat: s.stat,
     description: s.description,
-    image: s.image ? toCMSImage(s.image, 800, s.company) : undefined,
+    image: s.image ? toCMSImage(s.image, 800, `${s.role} at ${s.company}, marketing work by ${PERSON_BRAND}`) : undefined,
     content: (s.challenge || s.solution || s.result) ? {
       challenge: s.challenge ?? '',
       solution: s.solution ?? '',
@@ -128,7 +137,7 @@ export function toJournalEntry(j: any): JournalEntry {
     excerpt: j.excerpt ?? '',
     body: j.body ?? [],
     estimatedReadingTime: j.estimatedReadingTime,
-    coverImage: j.coverImage ? toCMSImage(j.coverImage, 1200, j.title) : undefined,
+    coverImage: j.coverImage ? toCMSImage(j.coverImage, 1200, `${j.title}, journal entry by ${PERSON_BRAND}`) : undefined,
   };
 }
 
@@ -144,10 +153,10 @@ export function toBrand(b: any): Brand {
     accomplishments: b.accomplishments,
     gallery: (b.gallery ?? [])
       .filter((g: any) => g?.asset)
-      .map((g: any) => toCMSImage(g, 1200, b.name)),
+      .map((g: any) => toCMSImage(g, 1200, `${b.name}, founded by ${PERSON_BRAND}`)),
     instagramUrl: b.instagramUrl,
     pressLinks: b.pressLinks,
-    logo: b.logo ? toCMSImage(b.logo, 400, b.name) : undefined,
+    logo: b.logo ? toCMSImage(b.logo, 400, `${b.name} logo`) : undefined,
   };
 }
 
@@ -157,7 +166,7 @@ export function toAboutData(a: any): AboutData | null {
     heading: a.heading,
     subtitle: a.subtitle,
     location: a.location,
-    portraitImage: a.portraitImage ? toCMSImage(a.portraitImage, 800, 'Dean Oriade Portrait') : undefined,
+    portraitImage: a.portraitImage ? toCMSImage(a.portraitImage, 800, `Portrait of ${PERSON_BRAND}`) : undefined,
     narrative: a.narrative ?? [],
     gear: a.gear,
     education: a.education,
@@ -172,7 +181,7 @@ export function toHomeData(h: any): HomeData | null {
     intro: h.intro ?? '',
     subtext: h.subtext ?? '',
     ctaText: h.ctaText,
-    heroImage: h.heroImage ? toCMSImage(h.heroImage, 1600, 'Dean Oriade') : undefined,
+    heroImage: h.heroImage ? toCMSImage(h.heroImage, 1600, PERSON_BRAND) : undefined,
   };
 }
 

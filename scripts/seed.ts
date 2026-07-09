@@ -89,6 +89,7 @@ async function seedSiteConfig() {
 
 async function seedStrategy(cfcImage: Awaited<ReturnType<typeof uploadLocalImage>>) {
   const obacImage = await uploadLocalImage('images/obac-event.jpg');
+  const shaksWorldImage = await uploadLocalImage('images/shakworld-event.jpg');
 
   const items: ({ _id: string; _type: string } & Record<string, any>)[] = [
     {
@@ -120,19 +121,44 @@ async function seedStrategy(cfcImage: Awaited<ReturnType<typeof uploadLocalImage
       result: "Reduced Cost Per Install (CPI) by 30% and drove 30% of total channel engagements over six months. Significantly increased organic search traffic.",
     },
     {
-      _id: 'strategy-siva-creative',
+      _id: 'strategy-shaks-world',
       _type: 'strategy',
-      company: 'SIVA Creative',
-      slug: { _type: 'slug', current: 'siva-creative' },
+      company: "Shak's World Assoc.",
+      slug: { _type: 'slug', current: 'shaks-world' },
       role: 'Digital Marketing Specialist',
-      period: '2020 to 2021',
-      stat: '16 Brands',
-      description: 'Managing diverse media strategies across multiple industries.',
-      // No verified real photo for this role — intentionally left unset
-      // rather than reusing a generic stock image.
-      challenge: "Managing media strategies for 10+ companies across multiple industries simultaneously while needing to prove measurable ROI.",
-      solution: "Created editorial calendars for 4 internal and 12 client brands. Conducted keyword/SEO audits and established an attribution model to track performance.",
-      result: "Improved organic search visibility and outperformed competitors in search rankings. Successfully led a team of copywriters and designers for cohesive execution.",
+      period: 'Sep 2020 - Feb 2022',
+      stat: '30% Engagement',
+      description: 'Leading organic content campaigns and SEO optimization.',
+      image: shaksWorldImage,
+      challenge: "The need to increase engagement and improve web presence to drive visitor growth for the association.",
+      solution: "Led an organic content campaign utilizing effective graphics and video. Developed an SEO-optimized website focused on search ranking improvement.",
+      result: "Increased Instagram engagement by 30% through content strategies and achieved 10% weekly growth in visitors via the new website.",
+    },
+    {
+      _id: 'strategy-simcoe-county-football',
+      _type: 'strategy',
+      company: 'Simcoe County Football',
+      slug: { _type: 'slug', current: 'simcoe-county-football' },
+      role: 'Lead Videographer & Content Strategist',
+      period: '2020 - 2021',
+      stat: '1M+ Combined Views',
+      description: "Growing football's presence across Simcoe County through video content and platform strategy.",
+      // No verified real photo for this role yet — intentionally left unset.
+      challenge: 'Football had limited visibility across the Simcoe County region. The page needed consistent, high-quality video content to build an audience from scratch.',
+      solution: 'Worked closely with founder Cameron Holkestra as lead videographer and lead content strategist, producing and managing video content across Instagram and TikTok.',
+      result: 'Grew the page to almost 750,000 views on Instagram over six months, and close to 300,000 combined views on TikTok over seven to eight months, helping push football’s visibility across the Simcoe County and Barrie area.',
+    },
+    {
+      _id: 'strategy-uoft-varsity-blues',
+      _type: 'strategy',
+      company: 'University of Toronto Varsity Blues',
+      slug: { _type: 'slug', current: 'uoft-varsity-blues' },
+      role: 'Official Videographer',
+      period: '2025 - 2026',
+      description: 'Official videographer for the University of Toronto varsity team during the 2025-2026 season.',
+      // No verified real photo, stat, or extended case-study narrative yet.
+      // TODO(dean): supply a headline stat and challenge/solution/result
+      // detail if you want a full case-study page here, plus a photo.
     },
   ];
 

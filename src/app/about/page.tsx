@@ -8,7 +8,7 @@ export const revalidate = 3600;
 
 export const metadata: Metadata = {
   title: 'About | Dean Oriade',
-  description: 'Marketing strategist, filmmaker, and photographer. Founder of Lotus Media and ROSSE Creative Collective, based in Toronto.',
+  description: 'Dean Oriade is a Toronto-based marketing strategist, filmmaker, and photographer, and the founder of Lotus Media and ROSSE Creative Collective.',
   alternates: { canonical: '/about' },
 };
 

@@ -42,7 +42,7 @@ export default async function StrategyDetail({ params }: Props) {
   const rawItems = await sanityFetch<any[]>(STRATEGY_QUERY);
   const item = (rawItems || []).map(toStrategyItem).find((s) => s.slug === slug);
 
-  if (!item || !item.content) notFound();
+  if (!item) notFound();
 
   return (
     <>

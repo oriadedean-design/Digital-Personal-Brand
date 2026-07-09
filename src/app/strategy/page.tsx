@@ -9,7 +9,7 @@ const DEFAULT_META = { title: 'Strategic Impact', caption: 'Connecting the dots 
 
 export const metadata: Metadata = {
   title: 'Strategy | Dean Oriade',
-  description: 'Marketing strategy case studies from the Canadian Film Centre, OYA Black Arts Coalition, and SIVA Creative.',
+  description: "Marketing strategy and video work by Dean Oriade, including the Canadian Film Centre, OYA Black Arts Coalition, and the University of Toronto Varsity Blues.",
   alternates: { canonical: '/strategy' },
 };
 
