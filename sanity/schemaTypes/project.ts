@@ -1,4 +1,5 @@
 import { defineField, defineType } from 'sanity';
+import { PROJECT_CATEGORIES } from '../../src/lib/categories';
 
 export const project = defineType({
   name: 'project',
@@ -9,6 +10,7 @@ export const project = defineType({
       name: 'title',
       title: 'Title',
       type: 'string',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'slug',
@@ -18,6 +20,7 @@ export const project = defineType({
         source: 'title',
         maxLength: 96,
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'seoTitle',
@@ -36,14 +39,9 @@ export const project = defineType({
       title: 'Category',
       type: 'string',
       options: {
-        list: [
-          { title: 'All', value: 'All' },
-          { title: 'Architecture', value: 'Architecture' },
-          { title: 'Faces', value: 'Faces' },
-          { title: 'Client Work', value: 'Client Work' },
-          { title: 'Film', value: 'Film' },
-        ],
+        list: PROJECT_CATEGORIES.map((c) => ({ title: c, value: c })),
       },
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'tags',
@@ -63,6 +61,7 @@ export const project = defineType({
       name: 'year',
       title: 'Year',
       type: 'number',
+      validation: (Rule) => Rule.required(),
     }),
     defineField({
       name: 'client',
@@ -98,25 +97,64 @@ export const project = defineType({
       of: [{ type: 'block' }],
     }),
     defineField({
+      name: 'mediaType',
+      title: 'Media Type',
+      type: 'string',
+      options: {
+        list: [
+          { title: 'Photo', value: 'photo' },
+          { title: 'Video', value: 'video' },
+        ],
+        layout: 'radio',
+      },
+      initialValue: 'photo',
+      validation: (Rule) => Rule.required(),
+    }),
+    defineField({
+      name: 'videoUrl',
+      title: 'Video URL',
+      type: 'url',
+      description: 'Vimeo or YouTube URL. Required when Media Type is Video.',
+      hidden: ({ document }) => document?.mediaType !== 'video',
+      validation: (Rule) =>
+        Rule.custom((value, context) => {
+          const doc = context.document as { mediaType?: string } | undefined;
+          if (doc?.mediaType === 'video' && !value) return 'Required when Media Type is Video';
+          return true;
+        }),
+    }),
+    defineField({
+      name: 'videoThumbnail',
+      title: 'Video Thumbnail',
+      type: 'image',
+      options: { hotspot: true },
+      description: 'Facade thumbnail shown before the video embed loads.',
+      hidden: ({ document }) => document?.mediaType !== 'video',
+      fields: [
+        {
+          name: 'alt',
+          type: 'string',
+          title: 'Alternative Text',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
+    }),
+    defineField({
       name: 'thumbnail',
       title: 'Thumbnail',
       type: 'image',
       options: {
         hotspot: true,
       },
+      validation: (Rule) => Rule.required(),
       fields: [
         {
           name: 'alt',
           type: 'string',
           title: 'Alternative Text',
-        }
-      ]
-    }),
-    defineField({
-      name: 'featuredImageAlt',
-      title: 'Featured Image Alt Text',
-      type: 'string',
-      description: 'Alt text for the thumbnail, kept at root for easier access.',
+          validation: (Rule) => Rule.required(),
+        },
+      ],
     }),
     defineField({
       name: 'gallery',
@@ -131,9 +169,10 @@ export const project = defineType({
               name: 'alt',
               type: 'string',
               title: 'Alternative Text',
-            }
-          ]
-        }
+              validation: (Rule) => Rule.required(),
+            },
+          ],
+        },
       ],
     }),
   ],

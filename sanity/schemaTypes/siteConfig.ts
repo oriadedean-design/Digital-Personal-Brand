@@ -72,6 +72,20 @@ export const siteConfig = defineType({
             ],
           }],
         },
+        {
+          name: 'skills',
+          title: 'Skills',
+          type: 'array',
+          of: [
+            {
+              type: 'object',
+              fields: [
+                { name: 'category', type: 'string', title: 'Category' },
+                { name: 'skills', type: 'array', title: 'Skills', of: [{ type: 'string' }] },
+              ],
+            },
+          ],
+        },
       ],
     }),
     defineField({
@@ -123,7 +137,6 @@ export const siteConfig = defineType({
         { name: 'twitter', title: 'X / Twitter URL', type: 'url', initialValue: 'https://x.com/deanaldoca' },
         { name: 'linkedin', title: 'LinkedIn URL', type: 'url', initialValue: 'https://www.linkedin.com/in/semilore-oriade' },
         { name: 'behance', title: 'Behance URL', type: 'url', initialValue: 'https://www.behance.net/deanoriade' },
-        { name: 'tiktok', title: 'TikTok URL', type: 'string', description: 'Placeholder: TIKTOK_URL — replace with real URL' },
       ],
     }),
   ],
