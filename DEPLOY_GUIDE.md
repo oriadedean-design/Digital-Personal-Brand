@@ -1,29 +1,29 @@
-# Deployment Guide: Deanaldo.ca
+# Deployment Guide: deanoriade.ca
 
-This project is built with **Vite + React** and connected to **Sanity CMS**. Follow these steps to deploy to Vercel.
+This project is built with **Next.js (App Router)** and connected to **Sanity CMS**. Follow these steps to deploy to Vercel.
 
 ## 1. Environment Variables (Vercel)
 
-Before deploying, go to your Vercel Project Settings > **Environment Variables** and add the following keys. These connect your frontend to the CMS.
+Before deploying, go to your Vercel Project Settings > **Environment Variables** and add the following keys. These connect the frontend to the CMS.
 
 | Key | Value Description |
 | :--- | :--- |
-| `VITE_SANITY_PROJECT_ID` | Your Sanity Project ID (Found in Sanity Manage) |
-| `VITE_SANITY_DATASET` | Usually `production` |
+| `NEXT_PUBLIC_SANITY_PROJECT_ID` | Your Sanity Project ID (Found in Sanity Manage) |
+| `NEXT_PUBLIC_SANITY_DATASET` | Usually `production` |
+| `SANITY_WRITE_TOKEN` | Editor-role API token, only needed if running `npm run ingest` or `npm run seed` from CI. Not required for the site to build or run. |
 
-**Important:** If you fail to add these, the app will build, but content will be missing or the connection will fail.
+**Important:** If you fail to add the two `NEXT_PUBLIC_*` keys, the build will fail (see `sanity/client.ts`), by design, so missing content is never silently served.
 
 ## 2. Sanity CORS Configuration
 
-For the app to fetch data from Sanity, you must whitelist your Vercel URL.
+For the Studio (`/studio`) and any client-side Sanity requests to work, whitelist your Vercel URL.
 
 1. Go to [manage.sanity.io](https://manage.sanity.io).
 2. Select your project.
 3. Go to **API** > **CORS Origins**.
 4. Click **Add CORS Origin**.
-5. Add your Vercel domain (e.g., `https://deanaldo-archive.vercel.app`).
-6. Check "Allow credentials" if necessary (usually not needed for public read).
-7. Save.
+5. Add your Vercel domain (e.g., `https://deanoriade.ca`).
+6. Save.
 
 ## 3. Deployment Commands
 
@@ -34,7 +34,7 @@ Stage your changes, commit, and push to your GitHub repository. Vercel will dete
 git add .
 
 # 2. Commit changes
-git commit -m "feat: add cms theme and production layout"
+git commit -m "feat: update site content"
 
 # 3. Push to main branch
 git push origin main

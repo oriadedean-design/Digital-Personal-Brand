@@ -1,20 +1,20 @@
-<div align="center">
+# deanoriade.ca
 
-</div>
+Dean Oriade's personal portfolio: photography, film, and journal writing, built with Next.js (App Router) and Sanity CMS.
 
-# Run and deploy your AI Studio app
+## Run locally
 
-This contains everything you need to run your app locally.
-
-View your app in AI Studio: https://ai.studio/apps/e4823470-3498-4633-8736-83ba69fd9081
-
-## Run Locally
-
-**Prerequisites:**  Node.js
-
+**Prerequisites:** Node.js, a Sanity project.
 
 1. Install dependencies:
    `npm install`
-2. Set the `GEMINI_API_KEY` in [.env.local](.env.local) to your Gemini API key
+2. Copy `.env.example` to `.env.local` and fill in `NEXT_PUBLIC_SANITY_PROJECT_ID` and `NEXT_PUBLIC_SANITY_DATASET`.
 3. Run the app:
    `npm run dev`
+
+## Content
+
+All content is managed in Sanity Studio at `/studio`. See `DEPLOY_GUIDE.md` for deployment.
+
+- `npm run ingest ./path/to/folder` — bulk-uploads photos as draft `photograph` documents, prefilled with EXIF metadata, for review before publishing.
+- `npm run seed` — one-time script that pushes verified real content into Sanity (safe to re-run).
