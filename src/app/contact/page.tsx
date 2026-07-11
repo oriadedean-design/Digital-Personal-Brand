@@ -2,16 +2,18 @@ import type { Metadata } from 'next';
 import { Mail, Instagram, Linkedin, MapPin } from 'lucide-react';
 import { SOCIAL_LINKS } from '../../constants';
 import { ContactForm } from '../../components/ContactForm';
+import { LocalBusinessJsonLd } from '../../components/JsonLd';
 
 export const metadata: Metadata = {
   title: 'Contact | Dean Oriade',
-  description: "Get in touch with Dean Oriade for photography, film, and creative direction projects.",
+  description: "Get in touch with Dean Oriade for photography, film, and creative direction projects in Toronto and the GTA.",
   alternates: { canonical: '/contact' },
 };
 
 export default function Contact() {
   return (
     <div className="max-w-5xl mx-auto px-4 md:px-6 pt-10 md:pt-24 pb-28 md:pb-32">
+      <LocalBusinessJsonLd />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-10 md:gap-16">
 
         {/* Left Col — Info */}
@@ -38,7 +40,7 @@ export default function Contact() {
               <div className="w-11 h-11 md:w-12 md:h-12 rounded-full border border-white/10 flex items-center justify-center shrink-0">
                 <MapPin className="w-4 h-4 md:w-5 md:h-5" />
               </div>
-              Mississauga, Ontario
+              <span>Mississauga, Ontario<span className="block text-xs text-neutral-500 mt-0.5">Serving Toronto and the GTA</span></span>
             </div>
           </div>
 

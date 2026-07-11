@@ -17,7 +17,7 @@ export const metadata: Metadata = {
     default: 'Dean Oriade | Filmmaker & Photographer, Toronto',
     template: '%s',
   },
-  description: 'Photography and film by Dean Oriade, founder of Lotus Media and ROSSE Creative Collective, based in Toronto.',
+  description: 'Photography and film by Dean Oriade, founder of Lotus Media and ROSSE Creative Collective. Based in Mississauga, serving Toronto and the GTA.',
   openGraph: {
     siteName: 'Dean Oriade',
     type: 'website',

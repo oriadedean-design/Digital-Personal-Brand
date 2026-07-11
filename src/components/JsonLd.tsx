@@ -22,7 +22,15 @@ export function PersonJsonLd() {
         url: SITE_URL,
         jobTitle: 'Marketing Strategist, Filmmaker & Photographer',
         description:
-          'Marketing strategist and filmmaker based in Toronto, founder of Lotus Media and ROSSE Creative Collective.',
+          'Marketing strategist and filmmaker based in Mississauga, serving Toronto and the Greater Toronto Area. Founder of Lotus Media and ROSSE Creative Collective.',
+        homeLocation: {
+          '@type': 'Place',
+          name: 'Mississauga, Ontario, Canada',
+        },
+        workLocation: {
+          '@type': 'Place',
+          name: 'Toronto, Ontario, Canada',
+        },
         alumniOf: {
           '@type': 'CollegeOrUniversity',
           name: 'York University',
@@ -47,6 +55,41 @@ export function PersonJsonLd() {
           'https://www.behance.net/deanoriade',
           'https://www.instagram.com/chooselotusmedia/',
           'https://www.instagram.com/rosse.hub/',
+        ],
+      }}
+    />
+  );
+}
+
+// Local-search signal for "photographer/filmmaker in Toronto" style queries.
+// Address is Dean's real base (Mississauga); areaServed states Toronto/GTA
+// explicitly rather than overstating the home address.
+export function LocalBusinessJsonLd() {
+  return (
+    <Script
+      data={{
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        name: 'Dean Oriade Photography & Film',
+        url: SITE_URL,
+        description:
+          'Photography, film, and marketing strategy services from Dean Oriade, based in Mississauga and serving Toronto and the Greater Toronto Area.',
+        founder: { '@type': 'Person', name: 'Dean Oriade' },
+        email: 'oriade.dean@gmail.com',
+        address: {
+          '@type': 'PostalAddress',
+          addressLocality: 'Mississauga',
+          addressRegion: 'ON',
+          addressCountry: 'CA',
+        },
+        areaServed: [
+          { '@type': 'City', name: 'Toronto' },
+          { '@type': 'City', name: 'Mississauga' },
+          { '@type': 'Place', name: 'Greater Toronto Area' },
+        ],
+        sameAs: [
+          'https://www.instagram.com/deanaldo.ca',
+          'https://www.behance.net/deanoriade',
         ],
       }}
     />

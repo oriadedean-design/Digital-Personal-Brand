@@ -8,7 +8,7 @@ import { ArrowRight } from 'lucide-react';
 import type { HomeData } from '../types';
 
 const FALLBACK_INTRO = 'Photography, film, and brand strategy.';
-const FALLBACK_SUBTEXT = 'Marketing strategist and filmmaker in Toronto, founder of Lotus Media and ROSSE Creative Collective.';
+const FALLBACK_SUBTEXT = 'Marketing strategist and filmmaker based in Mississauga, serving Toronto and the GTA. Founder of Lotus Media and ROSSE Creative Collective.';
 
 export function HomeHero({ data }: { data: HomeData | null }) {
   const intro = data?.intro || FALLBACK_INTRO;
