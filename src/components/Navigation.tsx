@@ -4,11 +4,12 @@ import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { motion } from 'framer-motion';
-import { Home, Aperture, Briefcase, BookOpen, User, Mail, Layers } from 'lucide-react';
+import { Home, Aperture, Briefcase, BookOpen, User, Mail, Layers, Clapperboard } from 'lucide-react';
 
 const navItems = [
   { path: '/', label: 'Home', icon: Home },
   { path: '/work', label: 'Archive', icon: Aperture },
+  { path: '/portfolio', label: 'Portfolio', icon: Clapperboard },
   { path: '/strategy', label: 'Strategy', icon: Layers },
   { path: '/ventures', label: 'Ventures', icon: Briefcase },
   { path: '/journal', label: 'Journal', icon: BookOpen },
