@@ -47,7 +47,11 @@ export default function Portfolio() {
             </h2>
             <p className="max-w-xl text-base text-muted md:text-lg">{startHere.description}</p>
           </div>
-          <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div
+            className={`grid grid-cols-1 gap-4 ${
+              startHere.links.length > 1 ? 'sm:grid-cols-2' : 'sm:max-w-sm'
+            }`}
+          >
             {startHere.links.map((link) => (
               <a
                 key={link.href}

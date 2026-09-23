@@ -44,17 +44,12 @@ export const contactLinks: ContactLink[] = [
 
 export const startHere = {
   heading: 'Start here',
-  description: 'A collection of video and content samples, plus additional work on Google Drive.',
+  description: 'A collection of video and content samples.',
   links: [
     {
       title: 'Video and content samples',
       subtitle: 'Open on Canva',
       href: 'https://www.canva.com/design/DAGW8XkH73Y/oNJLZBIsqHjE7V2egE_VSw/view',
-    },
-    {
-      title: 'Additional work',
-      subtitle: 'Open on Google Drive',
-      href: 'https://drive.google.com/file/d/1OBMCsPIjoIPC2EJdmD7tY1xrJHcw1BvJ/view?usp=sharing',
     },
   ] satisfies LeadLink[],
 };
